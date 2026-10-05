@@ -1,0 +1,33 @@
+{
+  "terminal.integrated.profiles.osx": {
+    "Claude Live": { "path": "/bin/zsh", "args": [".vscode/claude-live.zsh"], "icon": "sparkle" },
+    "Plain shell": { "path": "/bin/zsh", "args": ["-l"], "env": { "OVERWATCH_PLAIN": "1" } }
+  },
+  "terminal.integrated.defaultProfile.osx": "Claude Live",
+  "terminal.integrated.cwd": "${workspaceFolder}",
+  "terminal.integrated.env.osx": { "ZDOTDIR": "${workspaceFolder}/.vscode/zdot", "CLAUDE_LIVE_WS": "${workspaceFolder}" },
+  "terminal.integrated.defaultLocation": "editor",
+  "workbench.editor.editorActionsLocation": "hidden",
+  "terminal.integrated.persistentSessionReviveProcess": "onExitAndWindowClose",
+  "terminal.integrated.enablePersistentSessions": true,
+  "terminal.integrated.scrollback": 100000,
+  "terminal.integrated.fontSize": 11,
+  "terminal.integrated.minimumContrastRatio": 1,
+  "terminal.integrated.drawBoldTextInBrightColors": false,
+  "workbench.activityBar.location": "hidden",
+  "workbench.statusBar.visible": false,
+  "window.commandCenter": false,
+  "workbench.layoutControl.enabled": false,
+  "workbench.navigationControl.enabled": false,
+  "chat.commandCenter.enabled": false,
+  "terminal.integrated.tabs.enabled": false,
+  "workbench.editor.showTabs": "none",
+  "breadcrumbs.enabled": false,
+  "window.title": "./overwatch",
+  "workbench.colorCustomizations": {
+    "terminal.background": "#000000",
+    "terminal.foreground": "#00ff41",
+    "terminalCursor.foreground": "#00ff41",
+    "terminal.selectionBackground": "#00ff4144"
+  }
+}

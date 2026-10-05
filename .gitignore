@@ -1,0 +1,6 @@
+.DS_Store
+# a ./overwatch feed's working files, if you test inside the repo
+.claude-live.*
+.overwatch.alive
+.overwatch.pos
+.overwatch-stats.log
