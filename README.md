@@ -1,7 +1,7 @@
 # Claude Overwatch
 
-When Claude works in Cowork, I wanted to actually see what it was doing on my Mac while it
-worked, not just read the summary at the end. So I built `./overwatch`.
+I wanted to actually see what Claude was doing on my Mac while it worked in Cowork. The summary
+at the end is nice, but I wanted to watch it happen. So I built `./overwatch`.
 
 It's a VS Code window that types out everything Claude does as it happens: every command it runs,
 everything those commands print, and every line of code it writes. Green on black, like an old
@@ -131,12 +131,13 @@ skill under **Customize › Skills**.
 
 ## Why "./overwatch"
 
-It's written like a script you'd run in a terminal. That's on purpose.
+It's written like a script you'd run in a terminal. Green text on black, typing itself out while
+something else does the work... honestly I'm just trying to channel Neo with this.
 
 ## Feedback
 
 I built this with Claude in Cowork and use it for my own tasks. If something breaks or you have an idea,
-open an issue. I'd like to hear how it works for other people.
+open an issue. I'm curious how it works for other people.
 
 ## License
 
