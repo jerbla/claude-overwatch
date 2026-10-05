@@ -53,9 +53,9 @@ beginning and then keeps going live.
 2. **Start a Cowork task** in the folder you work in (mine is `~/Claude-Workspace`). When Claude
    asks "Run ./overwatch for this task?", say **Yes**. The first time, it sets the folder up for you.
 3. **Open the window.** Double-click **Open Overwatch.command** in that folder. VS Code opens with
-   just the feed running, nothing else. (The first time, macOS might complain since it came from the
-   internet: right-click it and choose Open. And if VS Code asks whether you trust the folder, say
-   yes, or the feed can't start.) I keep the window tiled on the left half of my screen.
+   just the feed running, nothing else. (If macOS says it can't open it, go to System Settings ›
+   Privacy & Security, scroll down and click **Open Anyway**. And if VS Code asks whether you trust
+   the folder, say yes, or the feed can't start.) I keep the window tiled on the left half of my screen.
 
 That's it. You don't have to edit anything.
 
