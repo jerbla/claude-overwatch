@@ -29,12 +29,13 @@ At the START of every Cowork task, before anything else (before folder or app ac
 - Optional time zone for the `[hh:mm:ss]` stamps: `.vscode/overwatch.conf` (`OVERWATCH_TZ=America/New_York`).
 
 ## Startup (on "Yes")
-1. Find the workspace. If a folder is already connected, run ONE device_bash call:
-   `OW=$(ls -d $HOME/mnt/*/.vscode/live.sh 2>/dev/null | head -1); [ -n "$OW" ] && source "$OW" && live_start "<task name>" && { overwatch_up && echo UP || echo DOWN; } || echo NOT-INSTALLED`
+1. Find the workspace. If a folder is already connected, run ONE device_bash call (it prefers a folder whose ./overwatch window is open right now, then any folder with ./overwatch installed):
+   `OW=""; for f in $HOME/mnt/*/.vscode/live.sh; do [ -f "$f" ] || continue; [ -z "$OW" ] && OW=$f; a="${f%/.vscode/live.sh}/.overwatch.alive"; [ -f "$a" ] && [ $(( $(date +%s) - $(stat -c %Y "$a") )) -lt 10 ] && { OW=$f; break; }; done; if [ -z "$OW" ]; then echo NOT-INSTALLED; else source "$OW"; echo "helpers: $OW"; live_start "<short task name>"; overwatch_up && echo UP || echo DOWN; fi`
+   - `live_start` runs once per task: it clears the feed and starts the task's clock. Every later device_bash call starts with `source "<workspace>/.vscode/live.sh"` (the path the line above printed); don't call live_start again.
    - If no folder is connected yet, request the one the user works in (`device_request_folder_access`, e.g. `["~/Claude-Workspace"]`), then run the line above.
-   - If several connected folders have ./overwatch, prefer the one this task is about; otherwise the first.
+   - If the task is clearly about a different connected folder than the one picked, source that folder's `.vscode/live.sh` instead.
 2. UP: the feed window is open. Start working; no screenshots, no more prompts.
-3. DOWN: VS Code isn't open on the workspace. Use computer access only now: `computer_resolve_access ["Visual Studio Code"]` -> `computer_request_access` -> `computer_open_application com.microsoft.VSCode` (or ask the user to double-click `Open Overwatch.command` in the folder). The feed starts and replays. Re-check `overwatch_up` after ~5s.
+3. DOWN: VS Code isn't open on the workspace. Nothing is lost: the feed replays the whole task when the window opens, so keep working either way. If you just did the first-time setup, or you have no computer access, make sure the user has been told once, in one line, to double-click `Open Overwatch.command` in the folder, and carry on. Otherwise you may open it with computer access: `computer_resolve_access ["Visual Studio Code"]` -> `computer_request_access` -> `computer_open_application com.microsoft.VSCode` (or ask the user to double-click `Open Overwatch.command` in the folder). The feed starts and replays. Re-check `overwatch_up` after ~5s.
    - Still DOWN with VS Code open on the folder: the user (or Claude with full control) picks Terminal > New Terminal; it opens as the feed in the editor area.
 4. NOT-INSTALLED: set it up once (see "First-time setup"), then continue from step 1.
 
@@ -42,22 +43,22 @@ At the START of every Cowork task, before anything else (before folder or app ac
 The files ship inside this skill: `install.sh`, `uninstall.sh`, `VERSION` and `template/` in this skill's base directory.
 1. Pack this skill's folder into ONE tarball and copy it into the workspace. Cowork's file-copy tool refuses paths that contain `.vscode` or dotfiles like `.zshrc`, so never copy the template files one by one. From a cloud workspace:
    `tar czf /mnt/user-data/outputs/overwatch-setup-<VERSION>.tgz -C "<this skill's base directory>/.." "<this skill's folder name>"`
-   then `device_commit_files` it to `<folder>/.overwatch-setup/overwatch-setup-<VERSION>.tgz` (a new file name for each version).
+   where `<VERSION>` is the contents of this skill's `VERSION` file and `<this skill's folder name>` is the last part of its base directory path. Then `device_commit_files` it to `<folder>/.overwatch-setup/overwatch-setup-<VERSION>.tgz` (keep that exact file name on the Mac side) (`<folder>` is the connected folder's path on the Mac).
 2. Unpack and install with device_bash:
-   `cd "$HOME/mnt/<folder-name>/.overwatch-setup" && tar xzf overwatch-setup-<VERSION>.tgz && bash */install.sh "$HOME/mnt/<folder-name>" "<the user's IANA time zone if known, e.g. America/New_York>"`
-   It copies the feed files, writes the time zone, merges the ./overwatch keys into `.vscode/settings.json` (keeping the user's own settings, with a backup), and adds the feed's working files to `.gitignore`.
+   `cd "$HOME/mnt/<folder-name>/.overwatch-setup" && tar xzmf overwatch-setup-<VERSION>.tgz && bash "<this skill's folder name>/install.sh" "$HOME/mnt/<folder-name>" "<the user's IANA time zone if known, e.g. America/New_York>"`
+   It copies the feed files, writes the time zone, merges the ./overwatch keys into `.vscode/settings.json` (keeping the user's own settings, with a backup), and adds the feed's working files to `.gitignore`. The `.overwatch-setup` folder stays (it's git-ignored and hidden in VS Code); it's fine to leave it.
 3. Tell the user in one line: double-click `Open Overwatch.command` in the folder. VS Code opens with just the feed running (if VS Code asks whether to trust the folder, they choose "Yes, I trust the authors"; if they had opened that folder in VS Code before, Cmd+B once hides the file sidebar). Then continue with Startup.
 To update later, do the same with the newer skill and run the installer again; to remove, run `uninstall.sh` (on the Mac it deletes files; inside Cowork, deleting needs the user's permission).
 
 ## During the task: route EVERYTHING through the feed
-Start each device_bash call with `source $HOME/mnt/<folder-name>/.vscode/live.sh`.
+Start each device_bash call with `source "<the helpers path the startup line printed>"` (the same as `source "$HOME/mnt/<folder-name>/.vscode/live.sh"`). Paths given to live_run and live_write are relative to the workspace folder, whatever directory the shell is in.
 - `live_note "Step 2 - build the report"`: section header (each one is a step in the summary)
-- `live_run 'command'`: shows `$ command` (extra lines as `> ...`), runs it in the workspace, streams ALL output, then ✓/✗ with exit code and time; returns the exit code
-- `live_write path/in/workspace < file` (or a heredoc): streams every line of the file with line numbers, then saves it. When the file already existed the header says what changed: `(6 lines · changed: lines 1-2, 6)`, `(… · 2 removed)`, `(… · no changes)`; Windows files say `· Windows line endings`. Write files this way, not with cat or sed, so the code appears. For edits, build the new version in scratch (`$HOME/...`), then live_write it.
+- `live_run 'command'`: shows `$ command` (extra lines as `> ...`), runs it in the workspace, streams ALL output, then ✓/✗ with exit code and time; returns the exit code. The output also comes back to you on stdout, so you can read your results directly; the ✓/✗ line goes only to the feed, so check the exit code with `$?`.
+- `live_write path/in/workspace < file` (or a heredoc): streams every line of the file with line numbers, then saves it. When the file already existed the header says what changed: `(6 lines · changed: lines 1-2, 6)`, `(… · 2 removed)`, `(… · no changes)`; Windows files say `· Windows line endings`. Write files this way, not with cat or sed, so the code appears. For edits, build the new version in a scratch dir outside the workspace (e.g. `$HOME/overwatch-scratch/`), then live_write it. Example: `live_write notes/plan.md <<'OVERWATCH_EOF'` … file content … `OVERWATCH_EOF`.
 - `live_remote 'command' EXIT_CODE SECONDS <<'OVERWATCH_EOF'` … the command's FULL output … `OVERWATCH_EOF`: for anything Claude ran outside the Mac's shell (in its cloud workspace: downloads, installs, image checks, syntax checks). The Mac-side shell may have no internet, so mirror that work here; it shows exactly like live_run with `· cloud` after the time.
 - Browser work (Claude in Chrome or the built-in browser): BEFORE each browser call, in the same message as a device_bash call, `live_web open "https://..."` (actions: open / read / click / type / close); after it `live_web_done "what happened"` or `live_web_fail "why"`. Batch the done-line of one step with the live_web of the next. Only log steps that really happen.
 - After every page read (get_page_text / read_page), stream the FULL text: `live_page "Page title" <<'OVERWATCH_EOF'` … `OVERWATCH_EOF` (quoted delimiter so nothing expands). Never shorten it.
-- At the very end of every task: `live_end`.
+- At the very end of every task: `live_end`. Its summary counts live_run results (✓/✗) and browser steps; "lag ... now ?" just means no ./overwatch window was open to measure.
 - `overwatch_lag` shows whether the user is seeing things in real time; after a big write it is normally tens to a few hundred lines and drops to 0 within ~10-20s.
 
 ## Habits while ./overwatch is on

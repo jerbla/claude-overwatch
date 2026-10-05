@@ -47,7 +47,7 @@ beginning and then keeps going live.
 
 ## Setup
 
-1. **Add the skill to Claude.** Download [`dist/overwatch-skill.zip`](dist/overwatch-skill.zip).
+1. **Add the skill to Claude.** Download [`overwatch-skill.zip`](https://github.com/jerbla/claude-overwatch/raw/main/dist/overwatch-skill.zip) (that link downloads it directly).
    In Claude go to **Customize › Skills**, hit **+**, then **Create skill › Upload a skill**, and
    pick the zip.
 2. **Start a Cowork task** in the folder you work in (mine is `~/Claude-Workspace`). When Claude
@@ -112,7 +112,7 @@ exactly what Claude is told to do.
 bash tests/run-tests.sh
 ```
 
-It installs into a temp folder and runs 28 checks: exit codes, every output line and every line of
+It installs into a temp folder and runs 29 checks: exit codes, every output line and every line of
 code showing up exactly, the change summaries, the summary at the end, and the viewer replaying a
 full task (that part needs zsh). The other checks need GNU tools, so run it in Claude's Cowork
 shell or on Linux.

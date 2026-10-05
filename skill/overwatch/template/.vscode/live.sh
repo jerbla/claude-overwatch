@@ -3,7 +3,8 @@
 #   live_start "task name"     -> clears the feed, starts a new task header and the task clock
 #   live_note "text"           -> section header (each one is a step in the end-of-task summary)
 #   live_run 'command'         -> shows $ command (> for extra lines), runs it in the workspace, streams ALL output,
-#                                 then a ✓/✗ line with exit code and time; returns the exit code
+#                                 then a ✓/✗ line with exit code and time; returns the exit code. The output is
+#                                 also printed back to Claude, so Claude sees its own results.
 #   live_write path < content  -> streams the file's code line by line, then saves it
 #   live_web action "detail"   -> a browser step (open / read / click / type / close) as a web> line
 #   live_web_done "result"     -> ↳ ✓ line for that browser step, with the time since live_web
@@ -39,7 +40,7 @@ live_run(){ local t0 rc ms el
   t0=$(date +%s%N); echo 1 > "$RUNF"
   # PYTHONUNBUFFERED + stdbuf: output streams line by line instead of arriving at the end
   # progress bars (\r updates) keep the final state of the line; every line is written, nothing dropped
-  (cd "$WS" && PYTHONUNBUFFERED=1 ${SB[@]} bash -o pipefail -c "$1" < /dev/null) 2>&1 | LC_ALL=C awk '{ sub(/\r$/, ""); n = split($0, a, "\r"); print "  " a[n]; fflush() }' >> "$LOG"
+  (cd "$WS" && PYTHONUNBUFFERED=1 ${SB[@]} bash -o pipefail -c "$1" < /dev/null) 2>&1 | LC_ALL=C awk -v lf="$LOG" '{ sub(/\r$/, ""); n = split($0, a, "\r"); print "  " a[n] >> lf; fflush(lf); print a[n]; fflush() }'
   rc=${PIPESTATUS[0]}; echo 0 > "$RUNF"
   (( rc == 141 )) && rc=0                              # SIGPIPE from "| head" etc. is not a failure
   ms=$(( ($(date +%s%N) - t0) / 1000000 )); el=$(printf '%d.%ds' $((ms / 1000)) $((ms % 1000 / 100)))

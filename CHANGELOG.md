@@ -22,4 +22,4 @@ First public release of Claude Overwatch (`./overwatch`).
   there's no file sidebar, chat sidebar or git pop-up. The feed's working files are hidden.
 - Installer and uninstaller that keep your own VS Code settings (merged, with a backup). Claude can
   do the whole setup for you the first time you say Yes.
-- Self-test: `bash tests/run-tests.sh` (28 checks).
+- Self-test: `bash tests/run-tests.sh` (29 checks).

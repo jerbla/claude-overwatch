@@ -31,6 +31,8 @@ live_run 'cat /no/such/file | wc -l' >/dev/null;                     r3=$?
 live_run 'seq 1 100000 | head -2' >/dev/null;                        r4=$?
 ok "exit codes: 0, 3, pipeline failure, | head" '[ $r1 = 0 ] && [ $r2 = 3 ] && [ $r3 = 1 ] && [ $r4 = 0 ]'
 ok "stdout and stderr both shown" 'plain | grep -qx "  hello" && plain | grep -qx "  to-stderr"'
+back=$(live_run 'echo back-to-claude')
+ok "live_run also hands its output back to Claude" '[ "$back" = "back-to-claude" ]'
 ok "red line for failures" 'plain | grep -q "^ ↳ ✗ exit 3"'
 live_run $'printf "a\\n"\necho second-line' >/dev/null
 ok "multi-line command: \$ then >" 'plain | grep -qx "\$ printf \"a\\\\n\"" && plain | grep -qx "> echo second-line"'
