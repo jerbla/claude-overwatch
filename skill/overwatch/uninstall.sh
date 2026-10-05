@@ -25,7 +25,7 @@ elif [ -f "$SETTINGS.before-overwatch" ]; then
   cp "$SETTINGS.before-overwatch" "$SETTINGS"; echo "  ~ restored .vscode/settings.json from the backup"
 fi
 rm -f .vscode/live.sh .vscode/claude-live.zsh .vscode/zdot/.zshrc .vscode/overwatch-settings.json \
-      .vscode/overwatch.conf "Open Overwatch.command" .claude-live.log .claude-live.steps .claude-live.webt \
+      .vscode/overwatch.conf .vscode/.overwatch-layout "Open Overwatch.command" .claude-live.log .claude-live.steps .claude-live.webt \
       .claude-live.maxlag .claude-live.run .overwatch.alive .overwatch.pos
 rmdir .vscode/zdot 2>/dev/null || true
 echo "Removed ./overwatch from $TARGET (kept .overwatch-stats.log, .gitignore lines and the settings backup)."

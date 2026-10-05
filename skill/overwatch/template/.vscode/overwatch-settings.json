@@ -1,12 +1,30 @@
 {
   "terminal.integrated.profiles.osx": {
-    "Claude Live": { "path": "/bin/zsh", "args": [".vscode/claude-live.zsh"], "icon": "sparkle" },
-    "Plain shell": { "path": "/bin/zsh", "args": ["-l"], "env": { "OVERWATCH_PLAIN": "1" } }
+    "Claude Live": {
+      "path": "/bin/zsh",
+      "args": [
+        ".vscode/claude-live.zsh"
+      ],
+      "icon": "sparkle"
+    },
+    "Plain shell": {
+      "path": "/bin/zsh",
+      "args": [
+        "-l"
+      ],
+      "env": {
+        "OVERWATCH_PLAIN": "1"
+      }
+    }
   },
   "terminal.integrated.defaultProfile.osx": "Claude Live",
   "terminal.integrated.cwd": "${workspaceFolder}",
-  "terminal.integrated.env.osx": { "ZDOTDIR": "${workspaceFolder}/.vscode/zdot", "CLAUDE_LIVE_WS": "${workspaceFolder}" },
+  "terminal.integrated.env.osx": {
+    "ZDOTDIR": "${workspaceFolder}/.vscode/zdot",
+    "CLAUDE_LIVE_WS": "${workspaceFolder}"
+  },
   "terminal.integrated.defaultLocation": "editor",
+  "workbench.startupEditor": "terminal",
   "workbench.editor.editorActionsLocation": "hidden",
   "terminal.integrated.persistentSessionReviveProcess": "onExitAndWindowClose",
   "terminal.integrated.enablePersistentSessions": true,
@@ -16,6 +34,7 @@
   "terminal.integrated.drawBoldTextInBrightColors": false,
   "workbench.activityBar.location": "hidden",
   "workbench.statusBar.visible": false,
+  "workbench.secondarySideBar.defaultVisibility": "hidden",
   "window.commandCenter": false,
   "workbench.layoutControl.enabled": false,
   "workbench.navigationControl.enabled": false,
@@ -29,5 +48,12 @@
     "terminal.foreground": "#00ff41",
     "terminalCursor.foreground": "#00ff41",
     "terminal.selectionBackground": "#00ff4144"
-  }
+  },
+  "files.exclude": {
+    ".claude-live.*": true,
+    ".overwatch.alive": true,
+    ".overwatch.pos": true,
+    ".overwatch-setup": true
+  },
+  "git.openRepositoryInParentFolders": "never"
 }

@@ -79,7 +79,7 @@ fi
 # 4. Keep the feed's working files out of git
 GI="$TARGET/.gitignore"; touch "$GI"
 for l in .claude-live.log .claude-live.steps .claude-live.webt .claude-live.maxlag .claude-live.run \
-         .overwatch.alive .overwatch.pos .overwatch-stats.log; do
+         .overwatch.alive .overwatch.pos .overwatch-stats.log .overwatch-setup/; do
   grep -qxF "$l" "$GI" || echo "$l" >> "$GI"
 done
 echo "  ~ .gitignore"

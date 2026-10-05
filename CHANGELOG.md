@@ -18,5 +18,8 @@ First public release of Claude Overwatch (`./overwatch`).
 - End-of-task summary and a running `.overwatch-stats.log`.
 - Heartbeat and lag files so Claude can tell the window is open without looking at your screen.
 - "Plain shell" terminal profile for a normal zsh in the same folder.
-- Installer and uninstaller that keep your own VS Code settings (merged, with a backup).
-- Self-test: `bash tests/run-tests.sh` (25 checks).
+- Opens as just the feed: the first time VS Code opens your folder, the feed starts by itself and
+  there's no file sidebar, chat sidebar or git pop-up. The feed's working files are hidden.
+- Installer and uninstaller that keep your own VS Code settings (merged, with a backup). Claude can
+  do the whole setup for you the first time you say Yes.
+- Self-test: `bash tests/run-tests.sh` (28 checks).

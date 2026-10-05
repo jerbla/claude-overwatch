@@ -52,9 +52,10 @@ beginning and then keeps going live.
    pick the zip.
 2. **Start a Cowork task** in the folder you work in (mine is `~/Claude-Workspace`). When Claude
    asks "Run ./overwatch for this task?", say **Yes**. The first time, it sets the folder up for you.
-3. **Open the window.** Double-click **Open Overwatch.command** in that folder. (The first time,
-   macOS might complain since it came from the internet. Right-click it and choose Open.)
-   I keep it tiled on the left half of my screen.
+3. **Open the window.** Double-click **Open Overwatch.command** in that folder. VS Code opens with
+   just the feed running, nothing else. (The first time, macOS might complain since it came from the
+   internet: right-click it and choose Open. And if VS Code asks whether you trust the folder, say
+   yes, or the feed can't start.) I keep the window tiled on the left half of my screen.
 
 That's it. You don't have to edit anything.
 
@@ -75,6 +76,9 @@ You still need the skill from step 1 so Claude knows to use the feed.
   **Plain shell** from the terminal dropdown.
 - **It keeps up.** It types at a readable speed and only speeds up when it falls behind (like
   when a command dumps thousands of lines), then goes back to normal.
+- **Just the feed.** The window opens with no file list, tabs, status bar or panels. If you had
+  already opened that folder in VS Code before installing, press Cmd+B once to hide the file list;
+  it stays hidden after that.
 - **Long lines wrap** if the window is narrow. At font size 11, half a laptop screen fits about
   100 characters of code.
 
@@ -108,7 +112,7 @@ exactly what Claude is told to do.
 bash tests/run-tests.sh
 ```
 
-It installs into a temp folder and runs 25 checks: exit codes, every output line and every line of
+It installs into a temp folder and runs 28 checks: exit codes, every output line and every line of
 code showing up exactly, the change summaries, the summary at the end, and the viewer replaying a
 full task (that part needs zsh). The other checks need GNU tools, so run it in Claude's Cowork
 shell or on Linux.

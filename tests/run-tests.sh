@@ -15,6 +15,9 @@ echo "Installer"
 bash "$ROOT/install.sh" "$WS" UTC >/dev/null 2>&1
 ok "files installed" '[ -f "$WS/.vscode/live.sh" ] && [ -f "$WS/.vscode/claude-live.zsh" ] && [ -f "$WS/.vscode/zdot/.zshrc" ] && [ -x "$WS/Open Overwatch.command" ]'
 ok "settings.json written" 'grep -q "Claude Live" "$WS/.vscode/settings.json"'
+ok "feed opens by itself in a fresh folder (startupEditor = terminal)" 'grep -q "\"workbench.startupEditor\": \"terminal\"" "$WS/.vscode/settings.json"'
+ok "no chat sidebar or git pop-up in the feed window" 'grep -q "secondarySideBar.defaultVisibility\": \"hidden" "$WS/.vscode/settings.json" && grep -q "openRepositoryInParentFolders\": \"never" "$WS/.vscode/settings.json"'
+ok "opener hides the file sidebar on first open" 'grep -q "workbench.sideBar.hidden" "$WS/Open Overwatch.command"'
 bash "$ROOT/install.sh" "$WS" UTC >/dev/null 2>&1
 ok "re-install is clean (no duplicate .gitignore lines)" '[ -z "$(sort "$WS/.gitignore" | uniq -d)" ]'
 
